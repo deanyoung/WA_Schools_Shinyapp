@@ -10,4 +10,4 @@ data %<>% mutate(norm_LowIncome=LowIncome/IQR(data$LowIncome),
                   norm_ELL=ELL/IQR(data$ELL),
                   norm_Enrollment=Enrollment/IQR(data$Enrollment),
                   ID = paste(School,District))
-neg <- TRUE
+neg <- "No"

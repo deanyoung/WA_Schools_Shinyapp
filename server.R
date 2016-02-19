@@ -56,18 +56,28 @@ shinyServer(function(input, output) {
     paste("Predicted percentage of low-income students who meet standards: ",predicted,"%",sep="")
   })
   
-  diff <- school.attr$mathLImet[1] - mean(data.euclid$mathLImet,na.rm=TRUE)
-  diff <- round(diff,1)
+  if(dim(data.euclid)[1]>0){
   
-  neg <<- (diff < 0)
+    diff <- school.attr$mathLImet[1] - mean(data.euclid$mathLImet,na.rm=TRUE)
+    diff <- round(diff,1)
+  
+    neg <<- ifelse(diff<0,"Yes","No")
+  }else{
+    neg <<- "Invalid"
+    
+  }
   
   
   output$diff <- renderUI({
-    if(neg==TRUE){
+    if(neg=="Yes"){
       div(paste("Differential in actual and predicted percentage: ",diff,"%",sep=""),
           style="color:#D9534F")
     }else{
-      paste("Differential in actual and predicted percentage: +",diff,"%",sep="")
+      if(neg=="No"){
+        paste("Differential in actual and predicted percentage: +",diff,"%",sep="")
+      }else{
+        paste("Differential in actual and predicted percentage: N/A")
+      }
     }
   })
   
