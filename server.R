@@ -52,14 +52,14 @@ shinyServer(function(input, output) {
   
   
   output$pred <- renderText({
-    predicted <- round(mean(data.euclid$mathLImet,na.rm=TRUE),1)
+    predicted <- round(mean(data.euclid$mathLImet,na.rm=TRUE),2)
     paste("Predicted percentage of low-income students who meet standards: ",predicted,"%",sep="")
   })
   
   if(dim(data.euclid)[1]>0){
   
     diff <- school.attr$mathLImet[1] - mean(data.euclid$mathLImet,na.rm=TRUE)
-    diff <- round(diff,1)
+    diff <- round(diff,2)
   
     neg <<- ifelse(diff<0,"Yes","No")
   }else{
