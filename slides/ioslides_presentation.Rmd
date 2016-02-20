@@ -23,13 +23,13 @@ library(ggplot2)
 library(magrittr)
 set.seed(76)
 
-knn_data <- data.frame(runif(30,0,10))
-colnames(knn_data) <- c("x")
-knn_data %<>% mutate(y=3*x,error=rnorm(30,0,1),yhat=y+error)
-knn_data %<>% mutate(euclid_4 = abs(4-x))
-knn_data %<>% mutate(three_closest = ifelse(euclid_4 %in% head(sort(knn_data$euclid_4),3), "Yes","No"))
+knn_example <- data.frame(runif(30,0,10))
+colnames(knn_example) <- c("x")
+knn_example %<>% mutate(y=3*x,error=rnorm(30,0,1),yhat=y+error)
+knn_example %<>% mutate(euclid_4 = abs(4-x))
+knn_example %<>% mutate(three_closest = ifelse(euclid_4 %in% head(sort(knn_example$euclid_4),3), "Yes","No"))
 
-ggplot(aes(x, yhat), data=knn_data) + geom_point(aes(col=three_closest, size=4)) +
+ggplot(aes(x, yhat), data=knn_example) + geom_point(aes(col=three_closest, size=4)) +
   geom_smooth(method="lm", se=FALSE) +
   scale_color_manual(values=c("black","red")) + 
   scale_x_continuous(breaks=seq(0,10,2)) +
@@ -37,15 +37,15 @@ ggplot(aes(x, yhat), data=knn_data) + geom_point(aes(col=three_closest, size=4))
   theme(legend.position="none") +
   ggtitle("K = 3")
 
-knn_data %>% filter(three_closest=="Yes") %>% summarise(mean(yhat))
+knn_example %>% filter(three_closest=="Yes") %>% summarise(mean(yhat))
 ```
 
 ## KNN (K=10)
 
 ```{r, echo=FALSE}
-knn_data %<>% mutate(ten_closest = ifelse(euclid_4 %in% head(sort(knn_data$euclid_4),10), "Yes","No"))
+knn_example %<>% mutate(ten_closest = ifelse(euclid_4 %in% head(sort(knn_example$euclid_4),10), "Yes","No"))
 
-ggplot(aes(x, yhat), data=knn_data) + geom_point(aes(col=ten_closest, size=4)) +
+ggplot(aes(x, yhat), data=knn_example) + geom_point(aes(col=ten_closest, size=4)) +
   geom_smooth(method="lm", se=FALSE) +
   scale_color_manual(values=c("black","red")) + 
   scale_x_continuous(breaks=seq(0,10,2)) +
@@ -53,7 +53,7 @@ ggplot(aes(x, yhat), data=knn_data) + geom_point(aes(col=ten_closest, size=4)) +
   theme(legend.position="none") +
   ggtitle("K = 10")
 
-knn_data %>% filter(ten_closest=="Yes") %>% summarise(mean(yhat))
+knn_example %>% filter(ten_closest=="Yes") %>% summarise(mean(yhat))
 
 ```
 
@@ -73,10 +73,11 @@ knn_data %>% filter(ten_closest=="Yes") %>% summarise(mean(yhat))
 ## KNN vs Linear Regression for WA School Data
 
 - Predict mathLImet with LowIncome, ELL, and Enrollment
+- Average data over years
 - Delete observations w/ missing data
 - Normalize predictors for KNN with IQR
 
-## Comparison
+## Why IQR?
 
 ```{r, echo=FALSE, message=FALSE}
 library(qpcR)
@@ -112,6 +113,14 @@ final_data <- grouped_data %>% dplyr::select(-NLIGradRate,-LIGradRate,-mathNLIme
 final_data %<>% na.omit()
 
 final_data_2 <- final_data %>% filter(LowIncome != 0)
+
+qplot(x=ELL, geom="histogram", data=final_data_2)
+```
+
+## Comparison
+
+```{r, echo=FALSE}
+
 
 knn_data <- final_data_2 %>% mutate(LowIncome=LowIncome/IQR(final_data_2$LowIncome),
                                     ELL=ELL/IQR(final_data_2$ELL),
