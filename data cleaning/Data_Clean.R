@@ -3,7 +3,7 @@ library(qpcR)
 library(dplyr)
 library(FNN)
 
-setwd("C:/Users/Dean/Desktop/Tableau_MindStorm")
+setwd("C:/Users/Dean/Desktop/Tableau_MindStorm/WA_Schools_Shinyapp/data cleaning")
 
 data <- read.csv("WA_schools_data.csv")
 

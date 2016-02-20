@@ -72,9 +72,9 @@ knn_example %>% filter(ten_closest=="Yes") %>% summarise(mean(yhat))
 
 ## KNN vs Linear Regression for WA School Data
 
-- Predict mathLImet with LowIncome, ELL, and Enrollment
+- Predict mathLImet with LowIncome (-), ELL (+), and Enrollment (-1)
 - Average data over years
-- Delete observations w/ missing data
+- Delete observations w/ missing data (scrapped grad rate)
 - Normalize predictors for KNN with IQR
 
 ## Why IQR?
