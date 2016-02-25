@@ -26,8 +26,7 @@ shinyUI(fluidPage(theme = "bootstrap.superhero.css",
     tableOutput("knn_table"),
     textOutput("pred"),
     uiOutput("diff"),
-    ("Restrictions:"),
-    textOutput("restrictlist")
+    plotOutput("graph")
     
     
   )
