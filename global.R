@@ -2,7 +2,7 @@ library(shiny)
 library(dplyr)
 library(magrittr)
 library(ggplot2)
-
+library(ggvis)
 
 data <- read.csv("WA_Schools_Shinyapp_Data.csv")
 data$School <- as.character(data$School)

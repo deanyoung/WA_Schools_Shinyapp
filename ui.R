@@ -14,6 +14,7 @@ shinyUI(fluidPage(theme = "bootstrap.superhero.css",
                   max = 30, value = 5),
       checkboxGroupInput("restrict", label = h3(strong("Restrictions")), 
                          choices = list("District", "Category", "Type")),
+      uiOutput("ggvis_plot_ui"),
       actionButton("go","Submit")
       
     ),
@@ -21,12 +22,12 @@ shinyUI(fluidPage(theme = "bootstrap.superhero.css",
   mainPanel(
     h3("Selected School"),
     tableOutput("school"),
-    div(textOutput("warn"), style="color:#D9534F"),
+    div(textOutput("warn"), style="color:red"),
     h3(textOutput("knn_title")),
     tableOutput("knn_table"),
     textOutput("pred"),
     uiOutput("diff"),
-    plotOutput("graph")
+    ggvisOutput("ggvis_plot")
     
     
   )

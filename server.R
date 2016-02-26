@@ -71,7 +71,7 @@ shinyServer(function(input, output) {
   output$diff <- renderUI({
     if(neg=="Yes"){
       div(paste("Differential in actual and predicted percentage: ",diff,"%",sep=""),
-          style="color:#D9534F")
+          style="color:red")
     }else{
       if(neg=="No"){
         paste("Differential in actual and predicted percentage: +",diff,"%",sep="")
@@ -103,18 +103,45 @@ shinyServer(function(input, output) {
     
   })
   
-  graph_data <- bind_rows(school.attr %>% mutate(Selected="Yes"), data.euclid %>% mutate(Selected="No"))
-  # order by pass rate
-  graph_data$School <- factor(graph_data$School, levels=graph_data$School[order(graph_data$mathLImet)]) 
+  graph_data <- bind_rows(school.attr %>% mutate(Selected="Yes"), data.euclid %>% mutate(Selected="No")) %>%
+    arrange(desc(mathLImet))
   
-  output$graph <- renderPlot({
-    ggplot(aes(x=School,y=mathLImet), data=graph_data) + geom_bar(stat="identity",aes(fill=Selected)) +
-      theme(legend.position="none") +
-      ggtitle(paste(isolate(input$k),"Nearest-Neighbor Schools")) +
-      xlab("Schools") +
-      ylab("L.I. Pass Rate % (math)")
+  graph_data %<>% mutate(rank = rownames(graph_data))
+  # order by pass rate
+  graph_data$School <- factor(graph_data$School, levels=graph_data$School[order(graph_data$mathLImet)])
+  
+  graph_data %>%
+    ggvis(~School,~mathLImet) %>%
+    layer_bars(fill= ~Selected) %>%
+    layer_text(text := ~rank, fontWeight := "bold", fontSize := 20, align:="center", fill := "white") %>%
+    hide_legend("fill") %>%
+    set_options(height = 700, width = 1000) %>%
+    add_axis("x", title = "", properties = axis_props(labels=list(
+                                                      angle = -45,
+                                                      align = "right",
+                                                      baseline = "top",
+                                                      fill = "white"))) %>%
+    add_axis("y", title="L.I. Pass Rate (math) %", properties = axis_props(labels=list(fill = "white"))) %>%
+    add_tooltip(function(df) paste0("<b>", "<font color='red'>", "School: ", df$x, "<br>", "Pass Rate: ",
+                                    round(as.numeric(df$stack_upr_),2)),"hover") %>%
+    bind_shiny("ggvis_plot","ggvis_plot_ui")
+  
+#   output$graph <- renderPlot({
+#     p <- ggplot(graph_data, aes(x=School,y=mathLImet, fill=Selected)) +
+#       geom_bar(stat="identity") +
+#       theme(legend.position="none", axis.text.x=element_text(angle=45, hjust=1)) +
+#       ggtitle(paste(isolate(input$k),"Nearest-Neighbor Schools")) +
+#       xlab("Schools") +
+#       ylab("L.I. Pass Rate % (math)") +
+#       scale_x_discrete(limits=levels(graph_data$School))
+#     
+#     p
     
-  })
+    #plotly currently has difficulties with ordered factors
+    #ggplotly(p)
+    
+    #plot_ly(graph_data,x=School,y=mathLImet,type="bar",group=Selected,showlegend=FALSE)
+  # })
   
   
   })
