@@ -103,7 +103,7 @@ shinyServer(function(input, output) {
     
   })
   
-  graph_data <- bind_rows(school.attr %>% mutate(Selected="Yes"), data.euclid %>% mutate(Selected="No"))
+  graph_data <- bind_rows(school.attr %>% mutate(Color="Yes"), data.euclid %>% mutate(Color="No"))
   
   # nn = nearest neighbor rank
   graph_data %<>% mutate(nn = as.numeric(rownames(graph_data)) - 1)
@@ -115,11 +115,11 @@ shinyServer(function(input, output) {
   graph_data$School <- factor(graph_data$School, levels=graph_data$School[order(desc(graph_data$mathLImet))])
   
   graph_data %>%
-    ggvis(~School,~mathLImet, key := ~rank) %>%
-    layer_bars(fill= ~Selected) %>%
+    ggvis(~School,~mathLImet, key := ~rank, fill = ~Color) %>%
+    layer_bars() %>%
     hide_legend("fill") %>%
     set_options(height = 700, width = 1000) %>%
-    add_axis("x", properties = axis_props(labels=list(
+    add_axis("x", grid = FALSE, properties = axis_props(labels=list(
                                                       text = ""),
                                           title=list(
                                                       fill = "white")

@@ -1,4 +1,4 @@
-shinyUI(fluidPage(theme = "bootstrap.superhero.css",
+shinyUI(fluidPage(theme = "bootstrap.slate.css",
   h1(strong("KNN Model for Washington Schools"), align="center"),
   sidebarLayout(
     sidebarPanel(
