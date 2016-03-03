@@ -10,6 +10,10 @@ shinyServer(function(input, output) {
     
   # Forces app to be non-reactive
   observeEvent(input$go, {
+    
+  output$first_title <- renderText({
+    "Selected School"
+  })
   
   # attributes of selected school
   school.attr <- data %>% filter(School==isolate(input$school), District==isolate(input$district))

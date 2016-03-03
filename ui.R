@@ -20,7 +20,7 @@ shinyUI(fluidPage(theme = "bootstrap.slate.css",
     ),
   
   mainPanel(
-    h3("Selected School"),
+    h3(textOutput("first_title")),
     tableOutput("school"),
     div(textOutput("warn"), style="color:red"),
     h3(textOutput("knn_title")),
