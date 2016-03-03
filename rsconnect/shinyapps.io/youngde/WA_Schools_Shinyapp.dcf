@@ -1,8 +1,8 @@
 name: WA_Schools_Shinyapp
 account: youngde
 server: shinyapps.io
-bundleId: 384083
+bundleId: 386197
 url: https://youngde.shinyapps.io/WA_Schools_Shinyapp/
-when: 1456815159.33286
+when: 1456976571.79782
 asMultiple: FALSE
 asStatic: FALSE
